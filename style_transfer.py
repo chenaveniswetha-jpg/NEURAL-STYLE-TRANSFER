@@ -2,6 +2,7 @@ import tensorflow as tf
 import tensorflow_hub as hub
 import matplotlib.pyplot as plt
 
+# Load image function
 def load_image(path):
     img = tf.io.read_file(path)
     img = tf.image.decode_image(img, channels=3)
@@ -10,15 +11,22 @@ def load_image(path):
     img = img[tf.newaxis, :]
     return img
 
+# Load images
 content_image = load_image("content.jpg.png")
 style_image = load_image("style.jpg.png")
+
+# Load AI model
 model = hub.load(
 'https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2'
 )
+
+# Apply style transfer
 stylized_image = model(
 tf.constant(content_image),
 tf.constant(style_image)
 )[0]
+
+# Show output
 plt.imshow(stylized_image[0])
 plt.axis('off')
 plt.show()
